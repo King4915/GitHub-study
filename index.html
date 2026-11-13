@@ -17,6 +17,8 @@
     --brand-dark:#0550ae;
     --green:#1a7f37;
     --green-bg:#dafbe1;
+    --red:#cf222e;
+    --red-bg:#ffebe9;
     --purple:#8250df;
     --orange:#bc4c00;
     --orange-bg:#fff1e5;
@@ -199,6 +201,19 @@
   .card h3{font-size:15px;margin-bottom:6px}
   .card p{font-size:13.5px;color:var(--ink-2)}
 
+  /* 合规对照表 */
+  .compare{display:grid;gap:16px;grid-template-columns:1fr}
+  @media (min-width:820px){.compare{grid-template-columns:1fr 1fr}}
+  .panel{border:1px solid var(--line-soft);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  .panel-head{padding:13px 18px;font-weight:600;font-size:15px}
+  .panel.ok .panel-head{background:var(--green-bg);color:var(--green)}
+  .panel.no .panel-head{background:var(--red-bg,#ffebe9);color:var(--red,#cf222e)}
+  .panel ul{list-style:none;padding:14px 18px;display:grid;gap:12px}
+  .panel li{display:flex;gap:10px;font-size:14px}
+  .panel li .mark{flex:none;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:3px}
+  .panel.ok .mark{background:var(--green-bg);color:var(--green)}
+  .panel.no .mark{background:var(--red-bg,#ffebe9);color:var(--red,#cf222e)}
+
   /* 术语表 */
   .glossary{display:grid;gap:0;border:1px solid var(--line-soft);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
   .glossary .row{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px 18px;border-top:1px solid var(--line-soft)}
@@ -246,7 +261,8 @@
       <a href="#ch5">提交与分支</a>
       <a href="#ch6">Pull Request</a>
       <a href="#ch7">部署网页</a>
-      <a href="#ch8">Star 与关注</a>
+      <a href="#ch8">HR 合规</a>
+      <a href="#ch9">Star 与关注</a>
     </nav>
   </div>
 </header>
@@ -280,8 +296,9 @@
         <li><a href="#ch5"><span class="num">05</span>提交记录与分支</a></li>
         <li><a href="#ch6"><span class="num">06</span>发起 Pull Request</a></li>
         <li><a href="#ch7"><span class="num">07</span>把 HTML 部署成网页</a></li>
-        <li><a href="#ch8"><span class="num">08</span>Star、关注与探索</a></li>
-        <li><a href="#glossary"><span class="num">09</span>常见名词速查</a></li>
+        <li><a href="#ch8"><span class="num">08</span>HR 资料合规速查</a></li>
+        <li><a href="#ch9"><span class="num">09</span>Star、关注与探索</a></li>
+        <li><a href="#glossary"><span class="num">10</span>常见名词速查</a></li>
       </ol>
     </aside>
 
@@ -753,9 +770,51 @@
         </div>
       </section>
 
-      <!-- ===== 08 Star 与关注 ===== -->
+      <!-- ===== 08 HR 合规红线速查 ===== -->
       <section class="chapter" id="ch8">
-        <div class="ch-head"><span class="ch-num">08</span><h2>Star、关注与探索项目</h2></div>
+        <div class="ch-head"><span class="ch-num">08</span><h2>HR 资料上传合规红线速查</h2></div>
+        <p class="ch-lead">作为 HR，日常接触简历、档案、薪酬绩效等敏感资料，上传或外发前必须先判断能不能对外。下面这张对照表用于快速自检；完整规定见配套的《HR 数据与资料上传合规红线须知》。</p>
+
+        <div class="note warn">
+          <h3>三条兜底原则</h3>
+          <ul>
+            <li><b>最小必要，按需可见</b>：HR 数据只在公司授权系统、给确有需要的人使用，外部平台不是存放简历和档案的地方。</li>
+            <li><b>公开即不可逆</b>：链接外发或上传外部空间后，即使马上删除，也可能已被转发、下载、截图或缓存。</li>
+            <li><b>存疑先问</b>：判断不清能不能给外部时，先停下问 HR 负责人 / 安全 / 法务，不要先传了再说。</li>
+          </ul>
+        </div>
+
+        <div class="compare" style="margin-top:20px">
+          <div class="panel ok">
+            <div class="panel-head">通常可以对外</div>
+            <ul>
+              <li><span class="mark">✓</span><div>已公开发布的招聘 JD、公司介绍</div></li>
+              <li><span class="mark">✓</span><div>脱敏后的面试方法、模板与课件框架（无真实人名和数据）</div></li>
+              <li><span class="mark">✓</span><div>全部由编造信息构成的虚构示例数据</div></li>
+              <li><span class="mark">✓</span><div>公司官方允许对外发布的雇主品牌材料</div></li>
+            </ul>
+          </div>
+          <div class="panel no">
+            <div class="panel-head">严禁上传 / 外发</div>
+            <ul>
+              <li><span class="mark">×</span><div>简历原件、姓名电话、证件号住址、学历与作品集附件</div></li>
+              <li><span class="mark">×</span><div>员工档案、合同、身份证与银行卡信息、背调结论</div></li>
+              <li><span class="mark">×</span><div>工资表、奖金期权、绩效排名、调薪与考勤明细</div></li>
+              <li><span class="mark">×</span><div>花名册、通讯录、组织架构、HC 编制与人才 Mapping</div></li>
+              <li><span class="mark">×</span><div>面试评语、离职/绩效面谈、投诉申诉等评价记录</div></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="note tip" style="margin-top:18px">
+          <h3>发布前快速自检</h3>
+          <p>外发前确认：无真实个人信息、无薪酬绩效与档案隐私、不是可识别到个人的汇总表；文件存放在公司指定系统，共享链接按人授权并设有效期，示例一律用虚拟数据。若不慎误传，立即停止分享并上报 HR 负责人与信息安全团队，不要自行删除了事。</p>
+        </div>
+      </section>
+
+      <!-- ===== 09 Star 与关注 ===== -->
+      <section class="chapter" id="ch9">
+        <div class="ch-head"><span class="ch-num">09</span><h2>Star、关注与探索项目</h2></div>
         <p class="ch-lead">学会逛别人的仓库，是 GitHub 学习的重要一环。下面几个按钮是你浏览项目时最常用到的。</p>
 
         <div class="content-block">
@@ -814,7 +873,7 @@
 
       <!-- ===== 09 术语速查 ===== -->
       <section class="chapter" id="glossary">
-        <div class="ch-head"><span class="ch-num">09</span><h2>常见名词速查</h2></div>
+        <div class="ch-head"><span class="ch-num">10</span><h2>常见名词速查</h2></div>
         <p class="ch-lead">学到后面遇到不熟的词，可以回到这张表快速对照。</p>
         <div class="glossary">
           <div class="row"><div class="term-name">Repository / Repo</div><div class="term-desc">仓库，存放项目全部文件和历史版本的地方，对应 GitHub 上的一个项目主页。</div></div>
@@ -847,4 +906,3 @@
 
 </body>
 </html>
-<!-- （注：内容由AI生成） -->
