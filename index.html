@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub 新手入门图文教程</title>
+<style>
+  :root{
+    --bg:#f6f8fa;
+    --surface:#ffffff;
+    --ink:#1f2328;
+    --ink-2:#57606a;
+    --ink-3:#8c959f;
+    --line:#d1d9e0;
+    --line-soft:#e6ebf0;
+    --brand:#0969da;
+    --brand-dark:#0550ae;
+    --green:#1a7f37;
+    --green-bg:#dafbe1;
+    --purple:#8250df;
+    --orange:#bc4c00;
+    --orange-bg:#fff1e5;
+    --yellow:#9a6700;
+    --yellow-bg:#fff8c5;
+    --radius:12px;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--brand);text-decoration:none}
+
+  /* ===== 顶部导航 ===== */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:#24292f;color:#fff;
+    border-bottom:1px solid #1f2328;
+  }
+  .topbar-inner{
+    max-width:980px;margin:0 auto;padding:12px 20px;
+    display:flex;align-items:center;gap:16px;
+  }
+  .brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:15px;white-space:nowrap}
+  .brand svg{flex:none}
+  .topnav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+  .topnav a{
+    color:#c9d1d9;font-size:13.5px;padding:6px 10px;border-radius:6px;
+  }
+  .topnav a:hover{background:#383f47;color:#fff}
+
+  /* ===== Hero ===== */
+  .hero{
+    background:#24292f;color:#fff;
+    padding:56px 20px 48px;
+  }
+  .hero-inner{max-width:980px;margin:0 auto}
+  .hero .kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;color:#7d8590;margin-bottom:16px;
+    font-family:var(--mono);
+  }
+  .hero h1{
+    font-size:clamp(28px,5vw,42px);line-height:1.25;font-weight:700;letter-spacing:-.5px;
+    max-width:18em;
+  }
+  .hero p{
+    margin-top:16px;color:#c9d1d9;font-size:clamp(15px,2vw,17px);max-width:42em;
+  }
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .hero-meta span{
+    font-size:13px;color:#c9d1d9;background:#383f47;
+    padding:6px 12px;border-radius:999px;
+  }
+
+  /* ===== 布局 ===== */
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
+  .layout{
+    display:grid;grid-template-columns:1fr;gap:32px;
+    padding:40px 0 80px;
+  }
+  @media (min-width:900px){
+    .layout{grid-template-columns:220px 1fr;gap:40px}
+  }
+
+  /* 侧边目录 */
+  .toc{
+    position:sticky;top:64px;align-self:start;
+    font-size:14px;
+  }
+  .toc h4{font-size:12px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;font-weight:600}
+  .toc ol{list-style:none;display:flex;flex-wrap:wrap;gap:2px 14px}
+  @media (min-width:900px){
+    .toc ol{flex-direction:column}
+  }
+  .toc a{display:block;padding:5px 0;color:var(--ink-2)}
+  .toc a:hover{color:var(--brand)}
+  .toc .num{font-family:var(--mono);color:var(--ink-3);margin-right:6px;font-size:12px}
+
+  /* ===== 章节 ===== */
+  section.chapter{margin-bottom:56px;scroll-margin-top:76px}
+  .ch-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  .ch-num{
+    font-family:var(--mono);font-size:14px;color:var(--brand);
+    background:#ddf4ff;border:1px solid #b6e3ff;border-radius:8px;
+    padding:2px 9px;flex:none;
+  }
+  .ch-head h2{font-size:clamp(21px,3vw,26px);font-weight:700;letter-spacing:-.2px}
+  .ch-lead{color:var(--ink-2);font-size:15.5px;margin:6px 0 22px;max-width:44em}
+
+  .content-block{display:grid;gap:22px}
+  @media (min-width:820px){
+    .content-block.split{grid-template-columns:1fr 1fr;align-items:start}
+  }
+
+  .note{
+    background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius);
+    padding:16px 18px;font-size:14.5px;
+  }
+  .note h3{font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .note p + p{margin-top:8px}
+  .note ul{padding-left:18px;margin-top:6px}
+  .note li{margin:5px 0}
+  .note.tip{border-left:3px solid var(--green)}
+  .note.warn{border-left:3px solid var(--orange)}
+  .note.tip h3{color:var(--green)}
+  .note.warn h3{color:var(--orange)}
+
+  .term{
+    background:var(--ink);color:#e6edf3;border-radius:6px;
+    padding:1px 6px;font-family:var(--mono);font-size:13px;
+  }
+
+  /* ===== 示意图卡片 ===== */
+  .shot{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;box-shadow:0 1px 3px rgba(31,35,40,.08);
+  }
+  .shot-bar{
+    display:flex;align-items:center;gap:8px;
+    padding:10px 14px;border-bottom:1px solid var(--line-soft);
+    background:#f6f8fa;
+  }
+  .dots{display:flex;gap:6px}
+  .dots i{width:10px;height:10px;border-radius:50%;display:block}
+  .dots i:nth-child(1){background:#ff5f57}
+  .dots i:nth-child(2){background:#febc2e}
+  .dots i:nth-child(3){background:#28c840}
+  .shot-url{
+    font-family:var(--mono);font-size:12px;color:var(--ink-2);
+    background:#fff;border:1px solid var(--line-soft);border-radius:6px;
+    padding:3px 10px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .shot-body{padding:16px}
+  .shot-body svg{display:block;width:100%;height:auto}
+  .shot-caption{
+    padding:10px 14px;border-top:1px solid var(--line-soft);
+    font-size:13px;color:var(--ink-2);background:#f6f8fa;
+    display:flex;gap:8px;align-items:flex-start;
+  }
+  .shot-caption .tag{
+    flex:none;font-size:11.5px;font-weight:600;color:var(--brand);
+    background:#ddf4ff;border-radius:5px;padding:1px 7px;margin-top:1px;
+  }
+
+  /* 步骤列表 */
+  .steps{list-style:none;counter-reset:step;display:grid;gap:14px}
+  .steps li{
+    counter-increment:step;position:relative;padding-left:44px;
+    font-size:15px;
+  }
+  .steps li::before{
+    content:counter(step);position:absolute;left:0;top:2px;
+    width:28px;height:28px;border-radius:50%;
+    background:var(--brand);color:#fff;font-weight:600;font-size:14px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .steps li b{color:var(--ink)}
+  .steps .sub{color:var(--ink-2);font-size:14px;margin-top:3px}
+
+  /* 概念卡网格 */
+  .cards{display:grid;gap:14px;grid-template-columns:1fr}
+  @media (min-width:640px){.cards{grid-template-columns:repeat(2,1fr)}}
+  @media (min-width:900px){.cards{grid-template-columns:repeat(3,1fr)}}
+  .card{
+    background:var(--surface);border:1px solid var(--line-soft);border-radius:var(--radius);
+    padding:18px;
+  }
+  .card .ico{
+    width:36px;height:36px;border-radius:9px;background:#ddf4ff;color:var(--brand);
+    display:flex;align-items:center;justify-content:center;margin-bottom:12px;
+  }
+  .card h3{font-size:15px;margin-bottom:6px}
+  .card p{font-size:13.5px;color:var(--ink-2)}
+
+  /* 术语表 */
+  .glossary{display:grid;gap:0;border:1px solid var(--line-soft);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  .glossary .row{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px 18px;border-top:1px solid var(--line-soft)}
+  .glossary .term-name,.glossary .term-desc{min-width:0}
+  .shot-body svg{min-width:0}
+  .glossary .row:first-child{border-top:none}
+  @media (max-width:560px){.glossary .row{grid-template-columns:1fr;gap:4px}}
+  .glossary .term-name{font-family:var(--mono);font-size:13.5px;color:var(--brand-dark);font-weight:600}
+  .glossary .term-desc{font-size:14px;color:var(--ink-2)}
+
+  /* 命令行块 */
+  .termblock{
+    background:#1f2328;color:#e6edf3;border-radius:var(--radius);
+    padding:16px 18px;font-family:var(--mono);font-size:13.5px;overflow-x:auto;
+  }
+  .termblock .line{margin:6px 0}
+  .termblock .cmt{color:#8b949e}
+  .termblock .cmd{color:#7ee787}
+
+  footer{
+    border-top:1px solid var(--line-soft);background:var(--surface);
+    padding:28px 20px;text-align:center;color:var(--ink-3);font-size:13px;
+  }
+
+  /* 标注编号在 SVG 内使用，这里给提示点 */
+  .callout-dot{fill:var(--brand)}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 16 16" fill="#fff" aria-hidden="true">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      GitHub 入门图文教程
+    </div>
+    <nav class="topnav">
+      <a href="#ch1">认识 GitHub</a>
+      <a href="#ch2">注册登录</a>
+      <a href="#ch3">创建仓库</a>
+      <a href="#ch4">上传文件</a>
+      <a href="#ch5">提交与分支</a>
+      <a href="#ch6">Pull Request</a>
+      <a href="#ch7">部署网页</a>
+      <a href="#ch8">Star 与关注</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="kicker">// 零基础 · 图文对照 · 照着做就能会</div>
+    <h1>从零开始看懂并使用 GitHub</h1>
+    <p>这份教程面向第一次接触 GitHub 的同学：先用大白话讲清楚它是什么，再一步步带你完成注册、建仓库、上传文件、提交修改和发起协作。每一步都配有界面示意图，旁边有文字解读，对照着操作即可。</p>
+    <div class="hero-meta">
+      <span>约 20 分钟读完</span>
+      <span>无需编程基础</span>
+      <span>8 个实操步骤</span>
+      <span>示意图为界面演示，非真实截图</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="layout">
+
+    <!-- 侧边目录 -->
+    <aside class="toc">
+      <h4>本教程目录</h4>
+      <ol>
+        <li><a href="#ch1"><span class="num">01</span>认识 GitHub</a></li>
+        <li><a href="#ch2"><span class="num">02</span>注册与登录</a></li>
+        <li><a href="#ch3"><span class="num">03</span>创建第一个仓库</a></li>
+        <li><a href="#ch4"><span class="num">04</span>上传与编辑文件</a></li>
+        <li><a href="#ch5"><span class="num">05</span>提交记录与分支</a></li>
+        <li><a href="#ch6"><span class="num">06</span>发起 Pull Request</a></li>
+        <li><a href="#ch7"><span class="num">07</span>把 HTML 部署成网页</a></li>
+        <li><a href="#ch8"><span class="num">08</span>Star、关注与探索</a></li>
+        <li><a href="#glossary"><span class="num">09</span>常见名词速查</a></li>
+      </ol>
+    </aside>
+
+    <main>
+
+      <!-- ===== 01 认识 GitHub ===== -->
+      <section class="chapter" id="ch1">
+        <div class="ch-head"><span class="ch-num">01</span><h2>先搞懂：GitHub 到底是什么</h2></div>
+        <p class="ch-lead">在动手之前，先用生活里的类比建立概念，后面所有操作都会变得好理解。</p>
+
+        <div class="content-block">
+          <div class="note">
+            <h3>一句话解释</h3>
+            <p><b>GitHub</b> 是一个把代码（或任何文本文件）放在云端、可以记录每一次改动、并方便多人协作的网站。你可以把它理解成「带历史版本记录的云盘 + 协作空间」。</p>
+            <p>它本身建立在 <span class="term">Git</span> 这个版本控制工具之上：Git 负责记录改动，GitHub 负责把这些记录放到网上、供人查看和协作。</p>
+          </div>
+          <div class="note tip">
+            <h3>用一个类比记住它</h3>
+            <ul>
+              <li><b>仓库（Repository）</b>：就像一个项目文件夹，里面装着这个项目的全部文件。</li>
+              <li><b>提交（Commit）</b>：像给文件夹拍了一张「存档快照」，写清这次改了什么。</li>
+              <li><b>分支（Branch）</b>：在不影响主线的前提下，另开一条副本去试验新想法。</li>
+              <li><b>Pull Request</b>：把你改动好的内容「申请合并回主线」，请别人检查。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cards" style="margin-top:22px">
+          <div class="card">
+            <div class="ico"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg></div>
+            <h3>存文件与历史版本</h3>
+            <p>每次修改都会留档，改错了可以翻回任意一次历史版本，不怕覆盖丢失。</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM2 5.5a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0Zm9.5-1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM9 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z"/></svg></div>
+            <h3>多人协作</h3>
+            <p>同事各自在自己的分支上修改，再通过评审合并到一起，改动过程清晰可追溯。</p>
+          </div>
+          <div class="card">
+            <div class="ico"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.375a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg></div>
+            <h3>公开分享与学习</h3>
+            <p>大量开源项目公开在上面，可以浏览别人的代码、提建议，也可以展示自己的作品。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 02 注册登录 ===== -->
+      <section class="chapter" id="ch2">
+        <div class="ch-head"><span class="ch-num">02</span><h2>注册账号并登录</h2></div>
+        <p class="ch-lead">第一步先拥有自己的 GitHub 账号。整个过程只需要邮箱、密码和一个用户名。</p>
+
+        <div class="content-block split">
+          <div class="shot">
+            <div class="shot-bar">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="shot-url">github.com/signup</div>
+            </div>
+            <div class="shot-body">
+              <!-- 注册页示意图 -->
+              <svg viewBox="0 0 520 330" role="img" aria-label="GitHub 注册页面示意图">
+                <rect x="0" y="0" width="520" height="330" fill="#fff"/>
+                <g transform="translate(240,22)">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" fill="#24292f" transform="scale(1.6)"/>
+                </g>
+                <text x="260" y="112" text-anchor="middle" font-size="17" font-weight="700" fill="#1f2328">创建你的账号</text>
+                <g font-size="12">
+                  <text x="80" y="150" fill="#57606a">用户名</text>
+                  <rect x="80" y="158" width="360" height="34" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+                  <text x="92" y="180" fill="#8c959f" font-family="monospace">your-name</text>
+                  <text x="80" y="216" fill="#57606a">邮箱地址</text>
+                  <rect x="80" y="224" width="360" height="34" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+                  <text x="92" y="246" fill="#8c959f">you@example.com</text>
+                </g>
+                <rect x="80" y="278" width="360" height="38" rx="8" fill="#1f883d"/>
+                <text x="260" y="302" text-anchor="middle" fill="#fff" font-size="14" font-weight="600">继续注册</text>
+                <!-- 标注 -->
+                <circle class="callout-dot" cx="452" cy="175" r="7"/>
+                <text x="452" y="179" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1</text>
+                <circle class="callout-dot" cx="452" cy="241" r="7"/>
+                <text x="452" y="245" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">2</text>
+                <circle class="callout-dot" cx="452" cy="297" r="7"/>
+                <text x="452" y="301" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">3</text>
+              </svg>
+            </div>
+            <div class="shot-caption"><span class="tag">示意</span><span>注册页依次填写用户名、邮箱，设置密码后提交；GitHub 会发送验证邮件，按提示完成验证即可。</span></div>
+          </div>
+
+          <div>
+            <ol class="steps">
+              <li><b>打开官网注册</b>
+                <div class="sub">浏览器访问 github.com，点击 <b>Sign up</b>，输入邮箱并设置密码。</div>
+              </li>
+              <li><b>起一个用户名</b>
+                <div class="sub">用户名会出现在你的仓库地址里（<span class="term">github.com/用户名</span>），建议用好记、规范的英文或拼音，后续改名也可以，但尽量一次定好。</div>
+              </li>
+              <li><b>完成邮箱验证</b>
+                <div class="sub">去邮箱收验证邮件并点击链接；未验证会影响部分功能，建议注册当天就完成。</div>
+              </li>
+              <li><b>登录与完善资料</b>
+                <div class="sub">回到 github.com 点 <b>Sign in</b> 登录；右上角头像进入个人主页，可补充昵称、头像和简介。</div>
+              </li>
+            </ol>
+            <div class="note warn" style="margin-top:18px">
+              <h3>新手提醒</h3>
+              <p>用户名属于公开信息，不要在里面写手机号、身份证号等隐私内容。密码请使用独立、足够复杂的一串，不要与其他网站重复。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 03 创建仓库 ===== -->
+      <section class="chapter" id="ch3">
+        <div class="ch-head"><span class="ch-num">03</span><h2>创建你的第一个仓库</h2></div>
+        <p class="ch-lead">仓库（Repository，常简称 <span class="term">repo</span>）是存放项目文件的地方。新建仓库是把项目放上 GitHub 的起点。</p>
+
+        <div class="content-block split">
+          <div>
+            <ol class="steps">
+              <li><b>点击新建仓库入口</b>
+                <div class="sub">登录后，点右上角头像旁边的 <b>+</b> 号，选择 <b>New repository</b>；也可以在首页左侧直接看到该入口。</div>
+              </li>
+              <li><b>填写仓库名称</b>
+                <div class="sub">Repository name 填一个项目名，比如 <span class="term">hello-world</span>。名字用英文、数字和短横线，不要带空格。</div>
+              </li>
+              <li><b>选择公开或私有</b>
+                <div class="sub"><b>Public（公开）</b>：任何人都能看到；<b>Private（私有）</b>：只有你和被邀请的人能看到。练习阶段可选 Public。</div>
+              </li>
+              <li><b>初始化仓库</b>
+                <div class="sub">勾选 <b>Add a README file</b>，让仓库自动带上一个说明文件，创建后不会是空仓库，方便下一步操作。</div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="shot">
+            <div class="shot-bar">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="shot-url">github.com/new</div>
+            </div>
+            <div class="shot-body">
+              <!-- 新建仓库表单示意图 -->
+              <svg viewBox="0 0 520 360" role="img" aria-label="新建仓库表单示意图">
+                <rect width="520" height="360" fill="#fff"/>
+                <text x="32" y="42" font-size="17" font-weight="700" fill="#1f2328">新建仓库</text>
+                <text x="32" y="66" font-size="12.5" fill="#57606a">在 GitHub 上开始一个新项目</text>
+
+                <text x="32" y="104" font-size="12.5" fill="#1f2328">仓库名称 <tspan fill="#8c959f">*</tspan></text>
+                <rect x="32" y="112" width="456" height="36" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+                <text x="44" y="135" fill="#57606a" font-family="monospace">hello-world</text>
+
+                <text x="32" y="176" font-size="12.5" fill="#1f2328">描述（可选）</text>
+                <rect x="32" y="184" width="456" height="36" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+                <text x="44" y="207" fill="#8c959f">我的第一个 GitHub 项目</text>
+
+                <g font-size="13">
+                  <circle cx="40" cy="252" r="7" fill="#0969da" stroke="#0969da"/>
+                  <circle cx="40" cy="252" r="3" fill="#fff"/>
+                  <text x="58" y="257" fill="#1f2328">Public</text>
+                  <text x="58" y="276" font-size="11.5" fill="#57606a">任何人都可以查看此仓库</text>
+
+                  <circle cx="40" cy="300" r="7" fill="#fff" stroke="#d1d9e0"/>
+                  <text x="58" y="305" fill="#1f2328">Private</text>
+                </g>
+
+                <g>
+                  <rect x="32" y="322" width="15" height="15" rx="3" fill="#0969da"/>
+                  <path d="M35.5 329.5l3 3 5-6" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                  <text x="56" y="335" font-size="13" fill="#1f2328">添加一个 README 文件</text>
+                </g>
+
+                <rect x="32" y="348" width="0" height="0" fill="none"/>
+                <circle class="callout-dot" cx="488" cy="130" r="7"/>
+                <text x="488" y="134" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1</text>
+                <circle class="callout-dot" cx="488" cy="252" r="7"/>
+                <text x="488" y="256" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">2</text>
+                <circle class="callout-dot" cx="488" cy="330" r="7"/>
+                <text x="488" y="334" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">3</text>
+              </svg>
+            </div>
+            <div class="shot-caption"><span class="tag">示意</span><span>① 填仓库名；② 选 Public / Private；③ 勾选 README 初始化。填写完成后点底部绿色按钮创建。</span></div>
+          </div>
+        </div>
+
+        <div class="note tip" style="margin-top:22px">
+          <h3>README 是什么</h3>
+          <p>README 是仓库里的「门面说明文件」，通常用 Markdown 写法，介绍项目是做什么的、怎么使用。别人点开你的仓库，第一眼看到的往往就是它。</p>
+        </div>
+      </section>
+
+      <!-- ===== 04 上传与编辑文件 ===== -->
+      <section class="chapter" id="ch4">
+        <div class="ch-head"><span class="ch-num">04</span><h2>上传与编辑文件</h2></div>
+        <p class="ch-lead">不需要安装任何软件，直接在网页上就能新建、上传和编辑文件。下面以编辑 README 为例。</p>
+
+        <div class="content-block split">
+          <div class="shot">
+            <div class="shot-bar">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="shot-url">github.com/your-name/hello-world</div>
+            </div>
+            <div class="shot-body">
+              <!-- 仓库主页 + 文件列表示意图 -->
+              <svg viewBox="0 0 520 350" role="img" aria-label="仓库主页文件列表示意图">
+                <rect width="520" height="350" fill="#fff"/>
+                <!-- 顶部仓库路径 -->
+                <text x="28" y="36" font-size="12" fill="#57606a">your-name / </text>
+                <text x="116" y="36" font-size="12" font-weight="600" fill="#0969da">hello-world</text>
+                <!-- 标签页 -->
+                <g font-size="12" fill="#57606a">
+                  <rect x="28" y="56" width="70" height="30" fill="#fff" stroke="#d1d9e0" rx="6"/>
+                  <text x="46" y="75">Code</text>
+                  <text x="128" y="75">Issues</text>
+                  <text x="196" y="75">Pull requests</text>
+                </g>
+                <line x1="28" y1="86" x2="492" y2="86" stroke="#d1d9e0"/>
+                <!-- 文件列表 -->
+                <g font-size="13">
+                  <rect x="28" y="100" width="464" height="44" rx="8" fill="#f6f8fa" stroke="#e6ebf0"/>
+                  <path d="M46 112v14m-5-11l5-5 5 5" stroke="#57606a" fill="none" stroke-width="1.4"/>
+                  <text x="70" y="127" fill="#0969da" font-weight="600">README.md</text>
+                  <text x="430" y="127" fill="#8c959f" font-size="11.5">今天 10:24</text>
+                </g>
+                <!-- 编辑按钮 -->
+                <g>
+                  <rect x="340" y="160" width="152" height="36" rx="8" fill="#f6f8fa" stroke="#d1d9e0"/>
+                  <path d="M358 172l10-10 6 6-10 10h-6z" fill="#57606a"/>
+                  <text x="384" y="183" font-size="13" fill="#1f2328">编辑文件</text>
+                </g>
+                <!-- 在线编辑器示意 -->
+                <rect x="28" y="212" width="464" height="118" rx="8" fill="#1f2328"/>
+                <text x="44" y="242" font-family="monospace" font-size="13" fill="#7ee787"># 你好，GitHub</text>
+                <text x="44" y="270" font-family="monospace" font-size="12.5" fill="#e6edf3">这是我的第一个仓库，用来练习上传和提交。</text>
+                <text x="44" y="298" font-family="monospace" font-size="12.5" fill="#8b949e">## 下一步：学习提交记录和分支</text>
+                <circle class="callout-dot" cx="488" cy="122" r="7"/>
+                <text x="488" y="126" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1</text>
+                <circle class="callout-dot" cx="488" cy="178" r="7"/>
+                <text x="488" y="182" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">2</text>
+              </svg>
+            </div>
+            <div class="shot-caption"><span class="tag">示意</span><span>① 仓库主页列出所有文件；② 点开文件后用右上角铅笔图标进入在线编辑，改完下拉到页面底部提交。</span></div>
+          </div>
+
+          <div>
+            <ol class="steps">
+              <li><b>进入要改的文件</b>
+                <div class="sub">在仓库主页点击文件名打开，再点右上角的<b>铅笔（Edit）</b>图标进入编辑模式。</div>
+              </li>
+              <li><b>直接在网页上修改</b>
+                <div class="sub">左侧编辑文字，右侧可预览 Markdown 渲染后的效果。README 常用标题、列表、链接等写法。</div>
+              </li>
+              <li><b>上传已有文件</b>
+                <div class="sub">在仓库主页点 <b>Add file → Upload files</b>，把本地文件拖进虚线区域，等待上传完成。</div>
+              </li>
+              <li><b>填写改动说明并提交</b>
+                <div class="sub">改完后拉到页面底部，在「提交更改」框里写清这次改了什么，再点绿色按钮保存（下一节详解）。</div>
+              </li>
+            </ol>
+            <div class="note" style="margin-top:18px">
+              <h3>网页操作 vs 本地 Git</h3>
+              <p>网页端适合改少量文本、上传小文件；当项目变大、需要频繁同步时，才需要安装本地 Git 工具并通过命令行推送，入门阶段用网页端完全足够。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 05 提交记录与分支 ===== -->
+      <section class="chapter" id="ch5">
+        <div class="ch-head"><span class="ch-num">05</span><h2>提交记录与分支</h2></div>
+        <p class="ch-lead">每一次保存改动都叫一次<b>提交（Commit）</b>，它是 GitHub 记录历史版本的基本单位；分支则让你能平行地开发不同功能。</p>
+
+        <div class="content-block">
+          <div class="shot">
+            <div class="shot-bar">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="shot-url">提交更改 · 在线编辑底部</div>
+            </div>
+            <div class="shot-body">
+              <svg viewBox="0 0 520 250" role="img" aria-label="提交更改对话框示意图">
+                <rect width="520" height="250" fill="#fff"/>
+                <text x="32" y="36" font-size="15" font-weight="700" fill="#1f2328">提交更改</text>
+                <rect x="32" y="56" width="456" height="40" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+                <text x="44" y="81" font-size="13" fill="#1f2328">更新 README：补上项目简介</text>
+                <rect x="32" y="108" width="456" height="56" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+                <text x="44" y="132" font-size="12.5" fill="#57606a">填写更详细的说明（可选）：改了哪些段落、为什么改。</text>
+                <g font-size="13">
+                  <circle cx="42" cy="196" r="7" fill="#0969da" stroke="#0969da"/>
+                  <circle cx="42" cy="196" r="3" fill="#fff"/>
+                  <text x="60" y="201" fill="#1f2328">直接提交到 <tspan font-family="monospace" fill="#57606a">main</tspan> 分支</text>
+                </g>
+                <rect x="32" y="216" width="160" height="30" rx="8" fill="#1f883d"/>
+                <text x="112" y="236" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">提交更改</text>
+                <circle class="callout-dot" cx="488" cy="76" r="7"/>
+                <text x="488" y="80" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1</text>
+                <circle class="callout-dot" cx="488" cy="196" r="7"/>
+                <text x="488" y="200" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">2</text>
+              </svg>
+            </div>
+            <div class="shot-caption"><span class="tag">示意</span><span>① 第一行写本次改动的简短标题；② 选择提交到哪个分支，新手先直接提交到 main。</span></div>
+          </div>
+
+          <div class="cards">
+            <div class="card">
+              <div class="ico"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M11.75 2.5a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm-2.25.75a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0ZM4 5.75a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5ZM1.75 6.5a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0Zm10 3.75a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm-2.25.75a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0Z"/></svg></div>
+              <h3>main 分支</h3>
+              <p>仓库默认的主线分支，通常存放可以正常使用的版本。最初所有提交都在 main 上。</p>
+            </div>
+            <div class="card">
+              <div class="ico"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M11.5 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM10 5.95a2.5 2.5 0 0 0-1.52.34l-2.96 1.78A2.5 2.5 0 0 0 4.5 6.55a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 1.02-.17l2.96 1.78A2.5 2.5 0 0 0 10 13.05a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0-1.52.52l-2.96-1.78c.11-.3.18-.62.18-.95s-.07-.65-.18-.95l2.96-1.78A2.5 2.5 0 0 0 10 5.95Z"/></svg></div>
+              <h3>新建分支</h3>
+              <p>点仓库上方的分支下拉框，输入分支名即可开一条副本。在新分支上改动不会影响 main。</p>
+            </div>
+            <div class="card">
+              <div class="ico"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M1.5 2.75a.75.75 0 0 1 .75-.75h11.5a.75.75 0 0 1 0 1.5H2.25a.75.75 0 0 1-.75-.75Zm0 5a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1-.75-.75Zm.75 4.25a.75.75 0 0 0 0 1.5h11.5a.75.75 0 0 0 0-1.5Z"/></svg></div>
+              <h3>查看历史</h3>
+              <p>点仓库的 <b>Commits</b> 可以看到每次提交的标题、时间和作者，点开能对比具体改了哪些内容。</p>
+            </div>
+          </div>
+
+          <div class="note tip">
+            <h3>好的提交信息怎么写</h3>
+            <p>标题用一句话说清「做了什么」，例如 <span class="term">修复登录按钮错位</span>、<span class="term">新增使用说明章节</span>；避免写成「更新一下」「改了点东西」这类事后无法追溯的描述。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 06 Pull Request ===== -->
+      <section class="chapter" id="ch6">
+        <div class="ch-head"><span class="ch-num">06</span><h2>发起 Pull Request 协作</h2></div>
+        <p class="ch-lead">Pull Request（简称 <span class="term">PR</span>）是 GitHub 协作的核心：你在分支上改完后，申请把改动合并回主线，并邀请别人查看、讨论和确认。</p>
+
+        <div class="content-block split">
+          <div class="shot">
+            <div class="shot-bar">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="shot-url">Pull Request 讨论页</div>
+            </div>
+            <div class="shot-body">
+              <svg viewBox="0 0 520 300" role="img" aria-label="Pull Request 页面示意图">
+                <rect width="520" height="300" fill="#fff"/>
+                <g>
+                  <circle cx="40" cy="38" r="11" fill="#1f883d"/>
+                  <path d="M40 32v12m-4-4 4 4 4-4" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                  <text x="62" y="36" font-size="15" font-weight="700" fill="#1f2328">更新 README 示例</text>
+                  <text x="62" y="56" font-size="12" fill="#57606a">从 feature/readme 合并到 main · 1 人参与</text>
+                </g>
+                <line x1="28" y1="76" x2="492" y2="76" stroke="#e6ebf0"/>
+                <!-- 状态标签 -->
+                <rect x="28" y="92" width="92" height="28" rx="14" fill="#dafbe1" stroke="#1a7f37"/>
+                <text x="74" y="111" text-anchor="middle" font-size="12" fill="#1a7f37" font-weight="600">可合并</text>
+                <!-- 改动概览 -->
+                <text x="28" y="148" font-size="13" font-weight="600" fill="#1f2328">改动概览</text>
+                <rect x="28" y="160" width="464" height="40" rx="8" fill="#f6f8fa"/>
+                <text x="44" y="185" font-family="monospace" font-size="12.5" fill="#1a7f37">README.md</text>
+                <text x="380" y="185" font-size="12" fill="#1a7f37">+6  -2</text>
+                <!-- 按钮 -->
+                <rect x="28" y="224" width="150" height="36" rx="8" fill="#1f883d"/>
+                <text x="103" y="247" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">合并 Pull Request</text>
+                <text x="200" y="247" font-size="12.5" fill="#57606a">合并后可删除该分支</text>
+                <circle class="callout-dot" cx="488" cy="106" r="7"/>
+                <text x="488" y="110" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1</text>
+                <circle class="callout-dot" cx="488" cy="242" r="7"/>
+                <text x="488" y="246" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">2</text>
+              </svg>
+            </div>
+            <div class="shot-caption"><span class="tag">示意</span><span>① 绿色「可合并」表示无冲突、可以合并；② 确认无误后点合并按钮，分支内容进入 main。</span></div>
+          </div>
+
+          <div>
+            <ol class="steps">
+              <li><b>在分支上完成改动并提交</b>
+                <div class="sub">先确保自己的改动都已提交到功能分支上。</div>
+              </li>
+              <li><b>发起 New Pull Request</b>
+                <div class="sub">进入仓库的 <b>Pull requests</b> 标签页，点 <b>New pull request</b>，选择「从哪个分支合并到 main」。</div>
+              </li>
+              <li><b>写清标题和说明</b>
+                <div class="sub">说明这次改动解决了什么问题、改了哪些文件，方便评审人快速理解。</div>
+              </li>
+              <li><b>等待评审与合并</b>
+                <div class="sub">协作者可以在下面留言讨论；确认没问题后由有权限的人点 <b>Merge pull request</b> 合并，PR 流程即完成。</div>
+              </li>
+            </ol>
+            <div class="note warn" style="margin-top:18px">
+              <h3>什么是冲突</h3>
+              <p>如果两个人同时改了同一处内容，合并时 GitHub 会提示<b>冲突（conflict）</b>，需要手动决定保留哪一版后才能合并。这是协作中的正常现象，不必紧张。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 07 部署 HTML 到网页 ===== -->
+      <section class="chapter" id="ch7">
+        <div class="ch-head"><span class="ch-num">07</span><h2>把 HTML 文件部署成公开网页</h2></div>
+        <p class="ch-lead">仓库里的 HTML 默认只是「文件」，别人点开看到的是源码。借助 GitHub 自带的 <b>GitHub Pages</b> 功能，可以把仓库里的网页直接发布成一个可访问的网址，免费、无需服务器。</p>
+
+        <div class="note">
+          <h3>先理解：Pages 是怎么回事</h3>
+          <p>GitHub 会把你仓库里指定分支上的文件，当成一个静态网站托管起来。配置完成后，访问形如 <span class="term">https://用户名.github.io/仓库名/</span> 的地址，就能看到你的页面。改完文件重新提交后，等待片刻网页会自动更新。</p>
+        </div>
+
+        <div class="content-block split" style="margin-top:22px">
+          <div class="shot">
+            <div class="shot-bar">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="shot-url">仓库 → Settings → Pages</div>
+            </div>
+            <div class="shot-body">
+              <!-- Pages 设置页示意图 -->
+              <svg viewBox="0 0 520 330" role="img" aria-label="GitHub Pages 设置页面示意图">
+                <rect width="520" height="330" fill="#fff"/>
+                <text x="32" y="36" font-size="16" font-weight="700" fill="#1f2328">Pages 设置</text>
+                <text x="32" y="58" font-size="12.5" fill="#57606a">通过 GitHub Pages 发布你的仓库网站</text>
+
+                <!-- Source 区块 -->
+                <text x="32" y="96" font-size="13" font-weight="600" fill="#1f2328">Branch（分支来源）</text>
+                <rect x="32" y="106" width="456" height="44" rx="8" fill="#f6f8fa" stroke="#d1d9e0"/>
+                <text x="48" y="133" font-family="monospace" font-size="13" fill="#1f2328">main</text>
+                <path d="M250 126l6 6 6-6" stroke="#57606a" fill="none" stroke-width="1.4"/>
+                <text x="280" y="133" font-size="13" fill="#57606a">/ (根目录)</text>
+
+                <!-- 已发布提示 -->
+                <rect x="32" y="172" width="456" height="70" rx="8" fill="#dafbe1" stroke="#1a7f37"/>
+                <circle cx="54" cy="198" r="10" fill="#1a7f37"/>
+                <path d="M49 198l4 4 7-8" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                <text x="74" y="196" font-size="13" font-weight="600" fill="#1a7f37">站点已发布</text>
+                <text x="74" y="218" font-family="monospace" font-size="12.5" fill="#1f2328">https://your-name.github.io/hello-world/</text>
+
+                <!-- 提示框 -->
+                <text x="32" y="278" font-size="12" fill="#57606a">首次发布约需 1～3 分钟生效；若打不开，稍等刷新即可。</text>
+
+                <circle class="callout-dot" cx="488" cy="128" r="7"/>
+                <text x="488" y="132" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1</text>
+                <circle class="callout-dot" cx="488" cy="207" r="7"/>
+                <text x="488" y="211" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">2</text>
+              </svg>
+            </div>
+            <div class="shot-caption"><span class="tag">示意</span><span>① 在 Branch 下拉选择 main 分支、根目录并保存；② 发布成功后这里会出现可访问的网站地址。</span></div>
+          </div>
+
+          <div>
+            <ol class="steps">
+              <li><b>把 HTML 上传到仓库</b>
+                <div class="sub">按第 04 章的方法，把网页文件传到仓库。首页文件必须命名为 <span class="term">index.html</span>，Pages 会默认把它作为网站首页。</div>
+              </li>
+              <li><b>打开仓库设置</b>
+                <div class="sub">进入仓库主页，点顶部的 <b>Settings</b>（设置）；在左侧菜单找到 <b>Pages</b> 选项。</div>
+              </li>
+              <li><b>选择发布分支并保存</b>
+                <div class="sub">在 <b>Branch</b> 处选择 <span class="term">main</span> 分支、目录保持 <span class="term">/ (root)</span>，点 <b>Save</b>。</div>
+              </li>
+              <li><b>等待生效并访问网址</b>
+                <div class="sub">等待 1～3 分钟，回到此页面，绿色提示区会显示你的网站地址，点开即可在浏览器看到发布后的页面。</div>
+              </li>
+            </ol>
+            <div class="note tip" style="margin-top:18px">
+              <h3>文件路径要对应好</h3>
+              <p>如果 <span class="term">index.html</span> 放在仓库根目录，网址直接打开首页；如果放在 <span class="term">docs/</span> 子目录，需在 Pages 设置里把目录选为 <span class="term">/docs</span>。页面里引用的图片、CSS 等资源也要用相对路径，否则上线后会裂图。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="note warn" style="margin-top:18px">
+          <h3>常见问题对照</h3>
+          <ul>
+            <li><b>打开是 404 页面</b>：刚保存需等待几分钟；也可能是首页没叫 <span class="term">index.html</span>，或文件所在目录与 Pages 设置不一致。</li>
+            <li><b>改了文件网页没变化</b>：确认改动已提交到所选分支；Pages 有缓存，可等一会儿或强刷页面（Ctrl / Cmd + Shift + R）。</li>
+            <li><b>页面样式/图片丢失</b>：多为资源用了本地绝对路径，改成 <span class="term">./图片名.png</span> 这类相对路径后重新提交。</li>
+            <li><b>私有仓库能用 Pages 吗</b>：免费账号下 Pages 通常仅对公开仓库开放；私有仓库的 Pages 属于付费功能，按页面提示为准。</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===== 08 Star 与关注 ===== -->
+      <section class="chapter" id="ch8">
+        <div class="ch-head"><span class="ch-num">08</span><h2>Star、关注与探索项目</h2></div>
+        <p class="ch-lead">学会逛别人的仓库，是 GitHub 学习的重要一环。下面几个按钮是你浏览项目时最常用到的。</p>
+
+        <div class="content-block">
+          <div class="shot">
+            <div class="shot-bar">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <div class="shot-url">某个开源仓库主页 · 右上角按钮区</div>
+            </div>
+            <div class="shot-body">
+              <svg viewBox="0 0 520 180" role="img" aria-label="Star Watch Fork 按钮示意图">
+                <rect width="520" height="180" fill="#fff"/>
+                <g font-size="13">
+                  <!-- Star -->
+                  <rect x="32" y="48" width="120" height="38" rx="8" fill="#f6f8fa" stroke="#d1d9e0"/>
+                  <path d="M52 58l3.2 6.5 7.2 1-5.2 5 1.2 7.1-6.4-3.4-6.4 3.4 1.2-7.1-5.2-5 7.2-1z" fill="#9a6700"/>
+                  <text x="72" y="72" fill="#1f2328" font-weight="600">Star</text>
+                  <text x="128" y="72" fill="#57606a" font-family="monospace">2.4k</text>
+                  <!-- Watch -->
+                  <rect x="168" y="48" width="120" height="38" rx="8" fill="#f6f8fa" stroke="#d1d9e0"/>
+                  <path d="M188 59c6 0 10 5 10 5s-4 5-10 5-10-5-10-5 4-5 10-5Zm0 3.2a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6Z" fill="#57606a"/>
+                  <text x="208" y="72" fill="#1f2328" font-weight="600">Watch</text>
+                  <text x="264" y="72" fill="#57606a" font-size="11.5">关注动态</text>
+                  <!-- Fork -->
+                  <rect x="304" y="48" width="120" height="38" rx="8" fill="#f6f8fa" stroke="#d1d9e0"/>
+                  <path d="M324 56v14m0-10h-6m6 0h6" stroke="#57606a" stroke-width="1.5" fill="none"/>
+                  <circle cx="324" cy="74" r="3" fill="#57606a"/>
+                  <circle cx="318" cy="54" r="3" fill="#57606a"/>
+                  <circle cx="330" cy="54" r="3" fill="#57606a"/>
+                  <text x="344" y="72" fill="#1f2328" font-weight="600">Fork</text>
+                  <text x="398" y="72" fill="#57606a" font-family="monospace">860</text>
+                </g>
+                <text x="32" y="128" font-size="12.5" fill="#57606a">在搜索框输入项目名或关键词，即可在公开仓库中查找感兴趣的开源项目。</text>
+                <rect x="32" y="140" width="360" height="28" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+                <text x="44" y="159" fill="#8c959f" font-size="12">搜索仓库、话题或用户名…</text>
+              </svg>
+            </div>
+            <div class="shot-caption"><span class="tag">示意</span><span>Star 收藏项目、Watch 接收动态、Fork 把别人的仓库复制一份到自己账号下再改动。</span></div>
+          </div>
+
+          <div class="cards">
+            <div class="card">
+              <h3>Star 收藏</h3>
+              <p>看到有用的项目点 Star，相当于加入书签；个人主页的 Stars 列表就是你的收藏夹，方便以后找回。</p>
+            </div>
+            <div class="card">
+              <h3>Watch 关注动态</h3>
+              <p>关注后，该仓库的 Issue、PR、发布等更新会通知到你的通知中心，适合你深度参与的项目。</p>
+            </div>
+            <div class="card">
+              <h3>Fork 复刻仓库</h3>
+              <p>想在别人项目基础上改，先 Fork 一份到自己账号，再从自己的副本提 PR 回原项目，这是开源贡献的常见方式。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 09 术语速查 ===== -->
+      <section class="chapter" id="glossary">
+        <div class="ch-head"><span class="ch-num">09</span><h2>常见名词速查</h2></div>
+        <p class="ch-lead">学到后面遇到不熟的词，可以回到这张表快速对照。</p>
+        <div class="glossary">
+          <div class="row"><div class="term-name">Repository / Repo</div><div class="term-desc">仓库，存放项目全部文件和历史版本的地方，对应 GitHub 上的一个项目主页。</div></div>
+          <div class="row"><div class="term-name">Commit</div><div class="term-desc">一次提交，对文件改动的一次存档快照，附带说明标题、时间和作者。</div></div>
+          <div class="row"><div class="term-name">Branch</div><div class="term-desc">分支，从主线分出的平行副本，用于开发新功能或试验，互不干扰。</div></div>
+          <div class="row"><div class="term-name">main / master</div><div class="term-desc">仓库默认主线分支名；新项目多为 main，老项目可能叫 master，作用相同。</div></div>
+          <div class="row"><div class="term-name">Pull Request / PR</div><div class="term-desc">合并请求，申请把某分支的改动合并到另一分支，并附带评审与讨论流程。</div></div>
+          <div class="row"><div class="term-name">Issue</div><div class="term-desc">议题，用来记录 bug、需求、讨论事项，可指派人员、打标签和关联 PR。</div></div>
+          <div class="row"><div class="term-name">Fork</div><div class="term-desc">把他人公开仓库复制一份到自己账号下，便于独立修改后再贡献回去。</div></div>
+          <div class="row"><div class="term-name">README</div><div class="term-desc">仓库说明文件，通常介绍项目用途、使用方法和贡献方式，常用 Markdown 编写。</div></div>
+          <div class="row"><div class="term-name">Merge</div><div class="term-desc">合并，把一个分支的改动并入另一个分支；PR 评审通过后执行的动作。</div></div>
+          <div class="row"><div class="term-name">Conflict 冲突</div><div class="term-desc">合并时同一处内容被多方修改导致无法自动合并，需人工取舍后再提交。</div></div>
+          <div class="row"><div class="term-name">GitHub Pages</div><div class="term-desc">GitHub 免费提供的静态网页托管服务，可把仓库里的 HTML 直接发布成公开网址。</div></div>
+          <div class="row"><div class="term-name">index.html</div><div class="term-desc">网站首页默认文件名；部署网页时根目录下的首页必须叫这个名字，否则访问网址会 404。</div></div>
+        </div>
+
+        <div class="note tip" style="margin-top:22px">
+          <h3>下一步可以练什么</h3>
+          <p>注册并建好第一个仓库后，建议按顺序练习：编辑一次 README 并写好提交信息 → 新建一条分支改点内容 → 发起一个 PR 并合并 → 上传一个 <span class="term">index.html</span> 并用 Pages 发布成网页 → 找一个感兴趣的开源项目点 Star 或 Fork。跑通这一轮，就完成了 GitHub 入门。</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer>
+  GitHub 新手入门图文教程 · 页面内界面均为演示示意图，实际界面以 github.com 为准
+</footer>
+
+</body>
+</html>
+<!-- （注：内容由AI生成） -->
